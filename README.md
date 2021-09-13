@@ -4,7 +4,7 @@ This is just a "Work in progess" for a backend application that needs to be used
 
 ### configurations
 run npm start to run server
-edit knexfile.js to mysql configs
+copy _exemple_knexfile.js to knexfile.js end edit to mysql configs
 
 
 #### Implemented Libraries
