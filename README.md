@@ -1,12 +1,12 @@
-# Backend App Restaurante
+# Backend Restaurant Service (WIP)
 
-Este aplicação se refere ao backend de um conjunto de app para um aplicativo de atendimetno em restaurante
+This is just a "Work in progess" for a backend application that needs to be used with front end module of Restaurant service
 
-#### Bibliotecas usadas
-**express** para requisições:
+#### Implemented Libraries
+**express** to requests:
 https://expressjs.com/
 
-**knex** query builder para database:
+**knex** query builder to database:
 https://knexjs.org/
 
 
