@@ -1,0 +1,22 @@
+{
+    "name": "modo_garcon_backend",
+    "version": "1.0.0",
+    "description": "Back end para o modo garçom",
+    "main": "src/app.js",
+    "scripts": {
+        "start": "nodemon app.js"
+    },
+    "keywords": [
+        "garçom",
+        "node",
+        "restaurante"
+    ],
+    "author": "Emerson Udovic",
+    "license": "ISC",
+    "dependencies": {
+        "express": "^4.17.1"
+    },
+    "devDependencies": {
+        "nodemon": "^2.0.12"
+    }
+}
