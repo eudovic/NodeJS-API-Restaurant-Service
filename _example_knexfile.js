@@ -8,8 +8,8 @@ module.exports = {
             host: 'localhost',
             port: 3306,
             user: 'root',
-            password: '',
-            database: ''
+            password: 'noders',
+            database: 'modo_garcom'
         },
         migrations: {
             directory: "./src/database/migrations",
@@ -22,9 +22,9 @@ module.exports = {
         connection: {
             host: '127.0.0.1',
             port: 3306,
-            user: 'your_database_user',
-            password: 'your_database_password',
-            database: 'myapp_test'
+            user: 'root',
+            password: 'noders',
+            database: 'modo_garcom'
         },
         pool: {
             min: 2,
