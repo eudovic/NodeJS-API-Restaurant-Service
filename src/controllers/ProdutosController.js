@@ -14,5 +14,23 @@ module.exports = {
             success: true,
             data: produtos
         });
+    },
+
+    async gravaPedido(req, res) {
+        const gravaProdutos = await connection(dbSettings.expenses_table)
+        .insert(
+            dbSettings.expenses_expenses_id_col,
+            dbSettings.expenses_expenses_name_expense_col,
+            dbSettings.expenses_expenses_price_col,
+            dbSettings.expenses_expenses_number_order_pad_col,
+            dbSettings.expenses_expenses_type_expense_col,
+            dbSettings.expenses_expenses_id_product_col,
+            dbSettings.expenses_expenses_quantity_col,
+            dbSettings.expenses_expenses_amount_col
+        );
+        return res.json({
+            success: true,
+            data: gravaProdutos
+        })
     }
 }
