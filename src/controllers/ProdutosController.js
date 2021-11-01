@@ -16,21 +16,28 @@ module.exports = {
         });
     },
 
-    async gravaPedido(req, res) {
-        const gravaProdutos = await connection(dbSettings.expenses_table)
-        .insert(
-            dbSettings.expenses_expenses_id_col,
-            dbSettings.expenses_expenses_name_expense_col,
-            dbSettings.expenses_expenses_price_col,
-            dbSettings.expenses_expenses_number_order_pad_col,
-            dbSettings.expenses_expenses_type_expense_col,
-            dbSettings.expenses_expenses_id_product_col,
-            dbSettings.expenses_expenses_quantity_col,
-            dbSettings.expenses_expenses_amount_col
-        );
-        return res.json({
-            success: true,
-            data: gravaProdutos
-        })
+     async gravaPedido(req, res) {
+
+        try{
+            return res.send();
+        } catch(err) {
+            return res.status(400).json({error: err.message});
+        }
     }
+    //     const gravaProdutos = await connection(dbSettings.expenses_table)
+    //     .insert(
+    //         dbSettings.expenses_expenses_id_col,
+    //         dbSettings.expenses_expenses_name_expense_col,
+    //         dbSettings.expenses_expenses_price_col,
+    //         // dbSettings.expenses_expenses_number_order_pad_col,
+    //         // dbSettings.expenses_expenses_type_expense_col,
+    //         // dbSettings.expenses_expenses_id_product_col,
+    //         // dbSettings.expenses_expenses_quantity_col,
+    //         dbSettings.expenses_expenses_amount_col
+    //     );
+    //     return res.json({
+    //         success: true,
+    //         data: gravaProdutos
+    //     })
+    // }
 }
