@@ -32,8 +32,6 @@ module.exports = {
     "expenses_expenses_id_col": "id_gasto",
     /*name expenses col*/
     "expenses_expenses_name_expense_col": "nome_gasto",
-    /*price expenses col*/
-    "expenses_expenses_price_col": "preco_produto",
     /*number of order pad expenses*/
     "expenses_expenses_number_order_pad_col": "numero_comanda_gasto",
     /*expenses types*/
@@ -43,7 +41,7 @@ module.exports = {
     /*quantity spent*/
     "expenses_expenses_quantity_col": "qt_gasto",
     /*amount spent*/
-    "expenses_expenses_amount_col": "valor gasto",
+    "expenses_expenses_amount_col": "valor_gasto",
 
     /*ENTITY CONTRIBUTORS***************************************/
     /* Entity that is related to order pad...

@@ -15,6 +15,6 @@ router.get('/orderpads', ComandasController.index)
 
 router.get('/contributors', ColaboradoresController.index)
 
-router.post('/expenses', ProdutoController.gravaPedido)
+router.post('/expenses', ProdutoController.sendProduct)
 
 module.exports = router
