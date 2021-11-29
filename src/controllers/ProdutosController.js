@@ -17,11 +17,17 @@ module.exports = {
     },
      async sendProduct(req, res) {
         const products = req.body;
+
+        
         console.log(req.method);
         if (req.method === "POST") {
+          // var emptyProductsArray = products.filter(function (i) {
+          //   return i;
+          // });
           return res.status(200).json({
               data: products,
             });
+            
         } else {
           return res.status(200).json({
               message: "deu errado ",
