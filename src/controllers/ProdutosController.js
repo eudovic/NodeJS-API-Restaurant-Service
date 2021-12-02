@@ -16,16 +16,18 @@ module.exports = {
         });
     },
      async sendProduct(req, res) {
-        const products = req.body;
-
-        
+        const products = req.body;       
         console.log(req.method);
         if (req.method === "POST") {
-          // var emptyProductsArray = products.filter(function (i) {
-          //   return i;
-          // });
+        //  const saveExpense =  await connection(dbSettings.expenses_table)
+        //   .insert(dbSettings.expenses_expenses_id_product_col = products.id_produto_ou_passeio,
+        //     dbSettings.expenses_expenses_name_expense_col = products.nome_produto,
+        //     dbSettings.expenses_expenses_amount_col = products.valor_gasto,
+        //     dbSettings.expenses_expenses_quantity_col = products.qtde_produto,
+        //     dbSettings.expenses_expenses_number_order_pad_col = 80)
           return res.status(200).json({
-              data: products,
+              
+              data: products
             });
             
         } else {
