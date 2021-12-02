@@ -4,7 +4,7 @@
     "description": "Back end para o modo garçom",
     "main": "src/app.js",
     "scripts": {
-        "start": "nodemon app.js"
+        "start": "nodemon src/app.js"
     },
     "keywords": [
         "garçom",
@@ -14,7 +14,10 @@
     "author": "Emerson Udovic",
     "license": "ISC",
     "dependencies": {
-        "express": "^4.17.1"
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "knex": "^0.95.11",
+        "mysql": "^2.18.1"
     },
     "devDependencies": {
         "nodemon": "^2.0.12"
