@@ -30,6 +30,8 @@ module.exports = {
     "expenses_table": "gastos",
     /*id product col*/
     "expenses_expenses_id_col": "id_gasto",
+    /*id user expense*/
+    "expenses_expenses_id_user_expense": "id_cliente_gasto",
     /*name expenses col*/
     "expenses_expenses_name_expense_col": "nome_gasto",
     /*number of order pad expenses*/
@@ -42,6 +44,10 @@ module.exports = {
     "expenses_expenses_quantity_col": "qt_gasto",
     /*amount spent*/
     "expenses_expenses_amount_col": "valor_gasto",
+     /*date of expense*/
+     "expenses_expenses_date_expense": "data_gasto",
+     /*time of expense*/
+     "expenses_expenses_time_expense": "hora_gasto",
 
     /*ENTITY CONTRIBUTORS***************************************/
     /* Entity that is related to order pad...
@@ -57,6 +63,44 @@ module.exports = {
     "contributors_id_col": "id_colaborador",
 
     /*name of collumn where we have contributors name */
-    "contributors_name_col": "nome_colaborador"
+    "contributors_name_col": "nome_colaborador",
+
+
+    /*ENTITY OBSERVATIONS**************************************/
+    /* Entity that is related to expenses...
+    /*
+     */
+    /*name of contributors table*/
+    "observations_table": "anotacoes_gasto",
+
+     /*name of contributors status table*/
+     "observations_id_col": "id",
+
+    /*name of collumn where we have observation name*/
+    "observations_observation_col": "anotacao",
+
+    /*name of collumn where we have expense ID */
+    "observations_expense_id": "id_gasto",
+
+    /*name of collumn where we have product ID */
+    "observations_product_id": "produto_id",
+
+
+    /*ENTITY COMPLEMENTS**************************************/
+    /* Entity that is related to expenses...
+    /*
+     */
+    /*name of complements table*/
+    "complements_table": "complementos_gastos",
+
+     /*complements id*/
+     "complements_id_col": "id",
+
+     /*expense id*/
+     "complements_expense_id_col": "gasto_id",
+
+    /*product ID */
+    "complements_product_id": "produto_id"
+
 
 }
