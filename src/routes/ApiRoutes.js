@@ -12,12 +12,16 @@ router.use(function timeLog(req, res, next) {
 
 router.get('/products', ProdutoController.index)
 
+router.get('/products/complements', ProdutoController.complementos)
+
 router.get('/orderpads', ComandasController.index)
 
 router.get('/contributors', ColaboradoresController.index)
 
-router.get('/expenses', GastosController.sendProduct)
+router.get('/expenses', GastosController.index)
 
 router.post('/expenses', GastosController.sendProduct)
+
+router.delete('/expenses/:idGasto', GastosController.deletarGasto)
 
 module.exports = router
