@@ -1,6 +1,5 @@
 const connection = require('../database/connection');
 const dbSettings = require("../../dbSettings");
-const { default: knex } = require('knex');
 
 var self = module.exports = {
 
@@ -26,14 +25,88 @@ var self = module.exports = {
                 
             )
             .where(dbSettings.expenses_expenses_date_expense, "=", data_formatada)
-            .orderBy(dbSettings.expenses_expenses_ticket_expense_col, 'DESC');
-            
+            .orderBy(dbSettings.expenses_expenses_ticket_expense_col, 'ASC');
+
+            const historicogasto = gastos.map(gasto => {
+
+                return {
+          
+                    numero_ticket: gasto.numero_ticket,
+                    id_gasto: gasto.id_gasto,
+                    nome_gasto: gasto.nome_gasto,
+                    numero_comanda_gasto: gasto.numero_comanda_gasto,
+                    valor_gasto: gasto.valor_gasto,
+                    qt_gasto: gasto.qt_gasto,
+                    anotacao: gasto.anotacao,
+                    nome_complemento: gasto.nome_complemento,
+                    valor_complemento: gasto.valor_complemento
+                    
+                };
+            })
         return res.json({
             success: true,
-            data: gastos
+            data: self.groupBy(historicogasto, 'numero_ticket')
         });
     },
 
+    groupBy(objectArray, property) {
+        return objectArray.reduce(function (acc, obj) {
+          let key = obj[property]
+            console.log(obj.id_gasto)
+          if (!acc[key]) {
+            acc[key] = []
+          }
+          let keyGasto = acc[key][obj.id_gasto]
+
+          if (! acc[key][obj.id_gasto]) {
+            acc[key][obj.id_gasto] = []
+          }
+          var qtGastos = acc[key][obj.id_gasto].length;
+
+          if(qtGastos == 0) {
+
+              if(obj.nome_complemento) {
+                obj.complementos = [
+                {
+                    nome_complemento : obj.nome_complemento,
+                    valor_complemento: obj.valor_complemento
+                }];
+              } else {
+                    obj.complementos = [];
+              }
+      
+              if(obj.anotacao) {
+                obj.anotacoes = [
+                {
+                    anotacao : obj.anotacao
+                }];
+              } else {
+                    obj.anotacoes = [];
+              }
+               acc[key][obj.id_gasto].push(obj)
+               
+               return acc
+          }
+      if(obj.nome_complemento) {
+        acc[key][obj.id_gasto][0].complementos.push(
+            {
+                nome_complemento:obj.nome_complemento,
+                valor_complemento: obj.valor_complemento
+            })
+      }
+      
+      if(obj.anotacao) {
+        acc[key][obj.id_gasto][0].anotacoes.push(
+            {
+                anotacao: obj.anotacao
+
+            })
+      }
+        return acc
+         
+        }, {})
+    },
+    
     async sendProduct(req, res) {
 
         var dataHoje = new Date().toLocaleString();
