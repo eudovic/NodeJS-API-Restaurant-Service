@@ -22,6 +22,8 @@ module.exports = {
     "product_product_name_col": "nome_produto",
     /*price product col*/
     "product_product_price_col": "preco_produto",
+     /*complements product col*/
+     "product_product_complement_col": "complemento",
 
      /*ENTITY EXPENSES***************************************/
     /* Entity that is related expenses table...
@@ -38,6 +40,10 @@ module.exports = {
     "expenses_expenses_number_order_pad_col": "numero_comanda_gasto",
     /*expenses types*/
     "expenses_expenses_type_expense_col": "tipo_gasto",
+    /*expenses tickets*/
+    "expenses_expenses_ticket_expense_col": "numero_ticket",
+    /*bool to see if the expense is related to the App */
+    "expenses_expenses_modo_garcom_expense_col": "modo_garcom",
     /*product id */
     "expenses_expenses_id_product_col": "id_produto_ou_passeio",
     /*quantity spent*/
@@ -96,11 +102,15 @@ module.exports = {
      /*complements id*/
      "complements_id_col": "id",
 
+     /*complements name*/
+     "complements_name_col": "nome_complemento",
+
+     /*complements value*/
+     "complements_value_col": "valor_complemento",
+
      /*expense id*/
      "complements_expense_id_col": "gasto_id",
 
     /*product ID */
     "complements_product_id": "produto_id"
-
-
 }
