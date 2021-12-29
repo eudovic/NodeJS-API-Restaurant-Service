@@ -105,7 +105,6 @@ module.exports = {
      /*complements name*/
      "complements_name_col": "nome_complemento",
 
-
      /*complements value*/
      "complements_value_col": "valor_complemento",
 
@@ -114,6 +113,4 @@ module.exports = {
 
     /*product ID */
     "complements_product_id": "produto_id"
-
-
 }
