@@ -112,5 +112,40 @@ module.exports = {
      "complements_expense_id_col": "gasto_id",
 
     /*product ID */
-    "complements_product_id": "produto_id"
+    "complements_product_id": "produto_id",
+
+
+    /*ENTITY USERS**************************************/
+    /* Entity that is related to the users to log in into the system.../*
+     */
+
+     /*name of users table*/
+     "users_table": "usuario",
+
+     /*users id*/
+     "users_id_col": "id_user",
+
+     /*owner bool col*/
+     "users_owner_bool_col": "proprietario",
+
+     /*users name col*/
+     "users_name_col": "nome",
+
+     /*users user col*/
+     "users_user_col": "usuario",
+
+    /*users password col */
+    "users_password_col": "senha",
+
+    /*users email col */
+    "users_email_col": "email",
+    
+    /*users level col */
+    "users_level_col": "nivel",
+
+    /*users status col */
+    "users_status_col": "status",
+
+    /*users commission col */
+    "users_comission_col": "comissionado"
 }
