@@ -4,9 +4,8 @@ const dbSettings = require("../../dbSettings");
 var self = (module.exports = {
   
   async index(req, res) {
-    var dataHoje = new Date().toLocaleString();
-    data_formatada = dataHoje.substr(6, 4) + "-" + dataHoje.substr(0, 2) + "-" + dataHoje.substr(3, 2);
-
+    var data_formatada = new Date().toISOString().substr(0,10)
+    
     const gastos = await connection(dbSettings.expenses_table)
       .leftJoin(dbSettings.observations_table,
         dbSettings.observations_table + "." + dbSettings.observations_expense_id,
@@ -104,9 +103,8 @@ var self = (module.exports = {
     return retorno;
   },
   async sendProduct(req, res) {
-    var dataHoje = new Date().toLocaleString();
-    data_formatada = dataHoje.substr(6, 4) + "-" + dataHoje.substr(0, 2) + "-" + dataHoje.substr(3, 2);
-
+    var data_formatada = new Date().toISOString().substr(0,10)
+    
     const buscaTicket = await connection(dbSettings.expenses_table)
       .select(dbSettings.expenses_expenses_ticket_expense_col)
       .where(dbSettings.expenses_expenses_date_expense, "=", data_formatada)
