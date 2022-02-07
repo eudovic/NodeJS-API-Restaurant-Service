@@ -54,6 +54,9 @@ module.exports = {
      "expenses_expenses_date_expense": "data_gasto",
      /*time of expense*/
      "expenses_expenses_time_expense": "hora_gasto",
+     /*id of contributor expense*/
+     "expenses_expenses_id_contributor_col": "id_colab_gasto",
+
 
     /*ENTITY CONTRIBUTORS***************************************/
     /* Entity that is related to order pad...
@@ -147,5 +150,26 @@ module.exports = {
     "users_status_col": "status",
 
     /*users commission col */
-    "users_comission_col": "comissionado"
+    "users_comission_col": "comissionado",
+
+    /*ENTITY PRINT QUEUE**************************************/
+    /* Entity that is related to the queue print.../*
+     */
+
+    "print_queue_table": "fila_de_impressao",
+
+     /*print queue id col */
+     "print_queue_id_col": "id",
+
+     /*print queue content col */
+     "print_queue_content_col": "conteudo",
+
+     /*print queue printed col */
+     "print_queue_printed_col": "impresso",
+
+     /*print queue date time of inserction */
+     "print_queue_inserction_date_time_col": "data_e_hora_de_insercao",
+
+     /*print queue date time print */
+     "print_queue_date_time_print": "data_e_hora_de_impressao",
 }
