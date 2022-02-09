@@ -27,7 +27,8 @@ var self = (module.exports = {
         dbSettings.complements_name_col,
         dbSettings.complements_value_col,
         dbSettings.complements_table + "." + dbSettings.complements_id_col + " AS id_complemento" ,
-        dbSettings.observations_table + "." + dbSettings.observations_id_col + " AS id_observacao"
+        dbSettings.observations_table + "." + dbSettings.observations_id_col + " AS id_observacao",
+        dbSettings.expenses_expenses_id_contributor_col,
       )
       .where(dbSettings.expenses_expenses_date_expense, "=", data_formatada)
       .orderBy('numero_ticket', 'desc', 'first');
@@ -44,10 +45,11 @@ var self = (module.exports = {
         nome_complemento: gasto.nome_complemento,
         valor_complemento: gasto.valor_complemento,
         id_complemento: gasto.id_complemento,
-        id_observacao: gasto.id_observacao
+        id_observacao: gasto.id_observacao,
+        id_colaborador: gasto.id_colab_gasto,
+        
       };
     });
-    
     var agrupa = self.groupBy(historicogasto, "numero_ticket");
     return res.json({
       success: true,
@@ -120,7 +122,14 @@ var self = (module.exports = {
     const products = req.body.arrayLimpaGasto;
     var cleanObservation = [];
     var complements = [];
-
+    let ticketParaImpressao = {
+      mesa: "",
+      numeroTicketFila: 0,
+      nomeProdutoFila: "",
+      qteProdutoFila: 0,
+      observacaoFila: "",
+      complementoFila: ""
+    }
     products.forEach((product) => {
       const expensesData = {
         [dbSettings.expenses_expenses_ticket_expense_col]: numeroTicket,
@@ -133,6 +142,7 @@ var self = (module.exports = {
         [dbSettings.expenses_expenses_amount_col]: product.valor_gasto,
         [dbSettings.expenses_expenses_number_order_pad_col]: product.comanda[0].numero_comanda_status,
         [dbSettings.expenses_expenses_id_user_expense]: product.comanda[0].id_cliente_gasto,
+        [dbSettings.expenses_expenses_id_contributor_col]: product.colaborador[0].id_colaborador,
       };
 
       connection(dbSettings.expenses_table)
@@ -146,7 +156,7 @@ var self = (module.exports = {
             let obsData = cleanObservation.filter((value, index) => {
               return value != " ";
             });
-
+            
             obsData.forEach((obs) => {
               if (!obs.produto_id) {
                 return;
@@ -160,10 +170,10 @@ var self = (module.exports = {
 
               if (observationData !== 0) {
                 self.gravarObservacao(observationData);
+                ticketParaImpressao.observacaoFila = obs.nome_obs;
               }
             });
           }
-
           if (complements != null) {
             complements.forEach((comp) => {
               if (!comp.id_produto) {
@@ -179,16 +189,27 @@ var self = (module.exports = {
 
               if (complementData !== 0) {
                 self.gravarComplemento(complementData);
+                ticketParaImpressao.complementoFila = comp.nome_produto;
               }
             });
           }
+          ticketParaImpressao.numeroTicketFila = numeroTicket;
+          ticketParaImpressao.nomeProdutoFila = product.nome_produto;
+          ticketParaImpressao.qteProdutoFila = product.qte_produto;
+          ticketParaImpressao.mesa = product.mesa;
+
+          self.filaDeImpressao(ticketParaImpressao);
         });
     });
     return res.json({
       success: true,
     });
   },
-
+    
+  async filaDeImpressao(data) {
+    var converteParaString = Object.values(data).toString();
+    console.log(converteParaString);
+  },
   async gravarObservacao(data) {
     await connection(dbSettings.observations_table)
       .insert(data)
