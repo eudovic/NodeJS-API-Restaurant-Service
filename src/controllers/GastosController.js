@@ -50,7 +50,6 @@ var self = (module.exports = {
         
       };
     });
-    
     var agrupa = self.groupBy(historicogasto, "numero_ticket");
     return res.json({
       success: true,
@@ -124,6 +123,7 @@ var self = (module.exports = {
     var cleanObservation = [];
     var complements = [];
     let ticketParaImpressao = {
+      mesa: "",
       numeroTicketFila: 0,
       nomeProdutoFila: "",
       qteProdutoFila: 0,
@@ -196,6 +196,7 @@ var self = (module.exports = {
           ticketParaImpressao.numeroTicketFila = numeroTicket;
           ticketParaImpressao.nomeProdutoFila = product.nome_produto;
           ticketParaImpressao.qteProdutoFila = product.qte_produto;
+          ticketParaImpressao.mesa = product.mesa;
 
           self.filaDeImpressao(ticketParaImpressao);
         });
@@ -204,8 +205,10 @@ var self = (module.exports = {
       success: true,
     });
   },
+    
   async filaDeImpressao(data) {
-    console.log(data);
+    var converteParaString = Object.values(data).toString();
+    console.log(converteParaString);
   },
   async gravarObservacao(data) {
     await connection(dbSettings.observations_table)
