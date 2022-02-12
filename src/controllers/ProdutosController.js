@@ -10,7 +10,8 @@ module.exports = {
             .select(
                 dbSettings.product_product_id_col,
                 dbSettings.product_product_name_col,
-                dbSettings.product_product_price_col
+                dbSettings.product_product_price_col,
+                dbSettings.product_preparavel_col
             );
         return res.json({
             success: true,

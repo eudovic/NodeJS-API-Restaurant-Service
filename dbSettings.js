@@ -24,6 +24,8 @@ module.exports = {
     "product_product_price_col": "preco_produto",
      /*complements product col*/
      "product_product_complement_col": "complemento",
+     /*preparavel product col*/
+     "product_preparavel_col": "preparavel",
 
      /*ENTITY EXPENSES***************************************/
     /* Entity that is related expenses table...
@@ -56,6 +58,8 @@ module.exports = {
      "expenses_expenses_time_expense": "hora_gasto",
      /*id of contributor expense*/
      "expenses_expenses_id_contributor_col": "id_colab_gasto",
+     /*table number*/
+     "expenses_expenses_table_number": "mesa_garcom",
 
 
     /*ENTITY CONTRIBUTORS***************************************/

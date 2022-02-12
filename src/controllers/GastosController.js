@@ -19,6 +19,7 @@ var self = (module.exports = {
         dbSettings.expenses_expenses_id_product_col,
         dbSettings.expenses_expenses_name_expense_col,
         dbSettings.expenses_expenses_number_order_pad_col,
+        dbSettings.expenses_expenses_table_number,
         dbSettings.expenses_expenses_id_user_expense,
         dbSettings.expenses_expenses_amount_col,
         dbSettings.expenses_table + "." + dbSettings.expenses_expenses_id_col,
@@ -39,6 +40,7 @@ var self = (module.exports = {
         id_gasto: gasto.id_gasto,
         nome_gasto: gasto.nome_gasto,
         numero_comanda_gasto: gasto.numero_comanda_gasto,
+        mesa_garcom: gasto.mesa_garcom,
         valor_gasto: gasto.valor_gasto,
         qt_gasto: gasto.qt_gasto,
         anotacao: gasto.anotacao,
@@ -122,15 +124,20 @@ var self = (module.exports = {
     const products = req.body.arrayLimpaGasto;
     var cleanObservation = [];
     var complements = [];
-    let ticketParaImpressao = {
-      mesa: "",
-      numeroTicketFila: 0,
-      nomeProdutoFila: "",
-      qteProdutoFila: 0,
-      observacaoFila: "",
-      complementoFila: ""
-    }
+    var complementoFila = [];
+    var observacaoFila = [];
+
+    
     products.forEach((product) => {
+      let ticketParaImpressao = {
+        mesa: "",
+        numeroTicketFila: 0,
+        nomeProdutoFila: "",
+        qteProdutoFila: 0,
+        observacaoFila: [],
+        complementoFila: []
+      }  
+
       const expensesData = {
         [dbSettings.expenses_expenses_ticket_expense_col]: numeroTicket,
         [dbSettings.expenses_expenses_name_expense_col]: product.nome_produto,
@@ -143,6 +150,7 @@ var self = (module.exports = {
         [dbSettings.expenses_expenses_number_order_pad_col]: product.comanda[0].numero_comanda_status,
         [dbSettings.expenses_expenses_id_user_expense]: product.comanda[0].id_cliente_gasto,
         [dbSettings.expenses_expenses_id_contributor_col]: product.colaborador[0].id_colaborador,
+        [dbSettings.expenses_expenses_table_number]: product.mesa
       };
 
       connection(dbSettings.expenses_table)
@@ -158,10 +166,11 @@ var self = (module.exports = {
             });
             
             obsData.forEach((obs) => {
+              
               if (!obs.produto_id) {
                 return;
               }
-
+              
               const observationData = {
                 [dbSettings.observations_expense_id]: parseInt(data),
                 [dbSettings.observations_observation_col]: obs.nome_obs,
@@ -170,7 +179,7 @@ var self = (module.exports = {
 
               if (observationData !== 0) {
                 self.gravarObservacao(observationData);
-                ticketParaImpressao.observacaoFila = obs.nome_obs;
+                ticketParaImpressao.observacaoFila.push(obs.nome_obs);
               }
             });
           }
@@ -189,7 +198,7 @@ var self = (module.exports = {
 
               if (complementData !== 0) {
                 self.gravarComplemento(complementData);
-                ticketParaImpressao.complementoFila = comp.nome_produto;
+                  ticketParaImpressao.complementoFila.push(comp.nome_produto);
               }
             });
           }
@@ -207,8 +216,20 @@ var self = (module.exports = {
   },
     
   async filaDeImpressao(data) {
+    var data_formatada = new Date().toISOString().substr(0,10)
     var converteParaString = Object.values(data).toString();
-    console.log(converteParaString);
+
+    const printQueue = {
+      [dbSettings.print_queue_content_col]: converteParaString,
+      [dbSettings.print_queue_inserction_date_time_col]: data_formatada,
+      [dbSettings.print_queue_printed_col]: false,
+    };
+    
+    await connection(dbSettings.print_queue_table)
+    .insert(printQueue)
+    .into(dbSettings.print_queue_table);
+
+      console.log(converteParaString);
   },
   async gravarObservacao(data) {
     await connection(dbSettings.observations_table)
