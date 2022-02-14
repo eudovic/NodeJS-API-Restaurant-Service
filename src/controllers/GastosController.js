@@ -124,9 +124,6 @@ var self = (module.exports = {
     const products = req.body.arrayLimpaGasto;
     var cleanObservation = [];
     var complements = [];
-    var complementoFila = [];
-    var observacaoFila = [];
-
     
     products.forEach((product) => {
       let ticketParaImpressao = {
@@ -207,7 +204,18 @@ var self = (module.exports = {
           ticketParaImpressao.qteProdutoFila = product.qte_produto;
           ticketParaImpressao.mesa = product.mesa;
 
-          self.filaDeImpressao(ticketParaImpressao);
+          var ticketFormatadoParaImprimir = `***************TICKET ${ticketParaImpressao.numeroTicketFila}***************\n
+                                             ***************MESA ${ticketParaImpressao.mesa}***************\n
+                                             ${ticketParaImpressao.qteProdutoFila}\t \t${ticketParaImpressao.nomeProdutoFila} \n 
+                                             ${ticketParaImpressao.observacaoFila}\n
+                                             ${ticketParaImpressao.complementoFila}`;
+
+          var preparavel = product.preparavel;
+          var tipoFila = '';
+
+          preparavel == 1 ? tipoFila = 'restaurante' : tipoFila = 'balcao';
+
+          self.filaDeImpressao(ticketFormatadoParaImprimir, tipoFila);
         });
     });
     return res.json({
@@ -215,21 +223,21 @@ var self = (module.exports = {
     });
   },
     
-  async filaDeImpressao(data) {
+  async filaDeImpressao(data, tipoFila) {
     var data_formatada = new Date().toISOString().substr(0,10)
-    var converteParaString = Object.values(data).toString();
-
+   
+    console.log(tipoFila);
     const printQueue = {
-      [dbSettings.print_queue_content_col]: converteParaString,
+      [dbSettings.print_queue_content_col]: data,
       [dbSettings.print_queue_inserction_date_time_col]: data_formatada,
       [dbSettings.print_queue_printed_col]: false,
+      [dbSettings.print_queue_type_queue_print]: tipoFila
     };
     
+    console.log(tipoFila);
     await connection(dbSettings.print_queue_table)
     .insert(printQueue)
     .into(dbSettings.print_queue_table);
-
-      console.log(converteParaString);
   },
   async gravarObservacao(data) {
     await connection(dbSettings.observations_table)

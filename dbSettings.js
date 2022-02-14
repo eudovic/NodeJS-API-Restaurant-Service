@@ -176,4 +176,7 @@ module.exports = {
 
      /*print queue date time print */
      "print_queue_date_time_print": "data_e_hora_de_impressao",
+
+     /*print queue type print */
+     "print_queue_type_queue_print": "tipo_fila",
 }
