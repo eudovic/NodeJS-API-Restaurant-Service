@@ -179,4 +179,7 @@ module.exports = {
 
      /*print queue type print */
      "print_queue_type_queue_print": "tipo_fila",
+
+     /*print queue ticket number */
+     "print_queue_ticket_number": "numero_ticket",
 }

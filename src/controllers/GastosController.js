@@ -5,7 +5,8 @@ var self = (module.exports = {
   
   async index(req, res) {
     var data_formatada = new Date().toISOString().substr(0,10)
-    
+    console.log(data_formatada);
+
     const gastos = await connection(dbSettings.expenses_table)
       .leftJoin(dbSettings.observations_table,
         dbSettings.observations_table + "." + dbSettings.observations_expense_id,
@@ -52,6 +53,7 @@ var self = (module.exports = {
         
       };
     });
+
     var agrupa = self.groupBy(historicogasto, "numero_ticket");
     return res.json({
       success: true,
@@ -124,16 +126,8 @@ var self = (module.exports = {
     const products = req.body.arrayLimpaGasto;
     var cleanObservation = [];
     var complements = [];
-    
+
     products.forEach((product) => {
-      let ticketParaImpressao = {
-        mesa: "",
-        numeroTicketFila: 0,
-        nomeProdutoFila: "",
-        qteProdutoFila: 0,
-        observacaoFila: [],
-        complementoFila: []
-      }  
 
       const expensesData = {
         [dbSettings.expenses_expenses_ticket_expense_col]: numeroTicket,
@@ -176,7 +170,6 @@ var self = (module.exports = {
 
               if (observationData !== 0) {
                 self.gravarObservacao(observationData);
-                ticketParaImpressao.observacaoFila.push(obs.nome_obs);
               }
             });
           }
@@ -195,49 +188,136 @@ var self = (module.exports = {
 
               if (complementData !== 0) {
                 self.gravarComplemento(complementData);
-                  ticketParaImpressao.complementoFila.push(comp.nome_produto);
               }
             });
           }
-          ticketParaImpressao.numeroTicketFila = numeroTicket;
-          ticketParaImpressao.nomeProdutoFila = product.nome_produto;
-          ticketParaImpressao.qteProdutoFila = product.qte_produto;
-          ticketParaImpressao.mesa = product.mesa;
-
-          var ticketFormatadoParaImprimir = `***************TICKET ${ticketParaImpressao.numeroTicketFila}***************\n
-                                             ***************MESA ${ticketParaImpressao.mesa}***************\n
-                                             ${ticketParaImpressao.qteProdutoFila}\t \t${ticketParaImpressao.nomeProdutoFila} \n 
-                                             ${ticketParaImpressao.observacaoFila}\n
-                                             ${ticketParaImpressao.complementoFila}`;
-
-          var preparavel = product.preparavel;
-          var tipoFila = '';
-
-          preparavel == 1 ? tipoFila = 'restaurante' : tipoFila = 'balcao';
-
-          self.filaDeImpressao(ticketFormatadoParaImprimir, tipoFila);
+         
         });
     });
+    
+    var produtosFilaCozinha = [];
+    var produtosFIlaCopa = [];
+    var mesa = 0;
+    var tipoFilaRestaurante = '';
+    var tipoFilaCopa = '';
+    
+    var complementosFilaImpressao = [];
+
+    products.map((prod) => {
+
+      var observacoesDoTicketImpressao = [];
+      var complementosDoTicketImpressao = [];
+      var preparavel = prod.preparavel;
+      var tipoFila = '';
+      preparavel == 1 ? tipoFila = 'restaurante' : tipoFila = 'balcao';
+      cleanObservation = prod.observacao;
+      complements = prod.complemento;
+
+      if (cleanObservation != null) {
+        let obsData = cleanObservation.filter((value, index) => {
+          return value != " ";
+        });
+        obsData.forEach((obs) => {
+          if (!obs.produto_id) {
+            return;
+          }
+          observacoesDoTicketImpressao.push(obs.nome_obs);
+        })
+      }
+      
+      if (tipoFila == 'restaurante') {
+
+        if (complements != null) {
+          complements.forEach((comp) => {
+            if (!comp.id_produto) {
+              return;
+            }
+            complementosDoTicketImpressao.push(comp.nome_produto);
+          })
+        }
+
+        produtosFilaCozinha.push(prod.qte_produto + " " + prod.nome_produto + " " + observacoesDoTicketImpressao);  
+        complementosFilaImpressao.push(complementosDoTicketImpressao.join("\n"));
+        tipoFilaRestaurante = tipoFila;
+
+      } else {
+        produtosFIlaCopa.push(prod.qte_produto + "\t" + prod.nome_produto + "\t" + observacoesDoTicketImpressao);
+        tipoFilaCopa = tipoFila;
+      }
+      mesa = prod.mesa; 
+    });
+
+var ticketCozinha = `
+**************************************************
+******************VIVA BROTAS*******************
+**************************************************
+************************************************** \n
+    \t \t           MESA ${mesa}
+-------------------------------------------------------------------------------------------------\n 
+    \t \t          TICKET ${numeroTicket}
+-------------------------------------------------------------------------------------------------\n
+QTDE    |   DESCRICAO   |   OBSERVAÇÃO  
+-------------------------------------------------------------------------------------------------\n 
+${produtosFilaCozinha.join("\n")} 
+-------------------------------------------------------------------------------------------------\n
+                    COMPLEMENTOS
+-------------------------------------------------------------------------------------------------\n  
+${complementosFilaImpressao.join("\n")}        
+-------------------------------------------------------------------------------------------------      
+`;
+
+console.log(ticketCozinha);
+
+var ticketCopa = `
+**************************************************
+******************VIVA BROTAS*******************
+**************************************************
+**************************************************\n
+    \t \t           MESA ${mesa}
+-------------------------------------------------------------------------------------------------\n 
+    \t \t          TICKET ${numeroTicket}
+-------------------------------------------------------------------------------------------------\n
+QTDE    |   DESCRICAO   |   OBSERVAÇÃO  
+-------------------------------------------------------------------------------------------------\n 
+${produtosFIlaCopa.join("\n")} 
+-------------------------------------------------------------------------------------------------\n
+`;
+    const imprimeCozinha = {
+      [dbSettings.print_queue_content_col]: ticketCozinha,
+      [dbSettings.print_queue_inserction_date_time_col]: data_formatada,
+      [dbSettings.print_queue_printed_col]: false,
+      [dbSettings.print_queue_type_queue_print]: tipoFilaRestaurante,
+      [dbSettings.print_queue_ticket_number]: numeroTicket
+    };
+      await connection(dbSettings.print_queue_table)
+      .insert(imprimeCozinha)
+      .into(dbSettings.print_queue_table);
+
+      setTimeout(() => {
+        if(produtosFIlaCopa.length <= 0) {
+          return;
+        }
+        self.imprimeCopa(ticketCopa, tipoFilaCopa,numeroTicket);
+      }, 2000);
+ 
     return res.json({
       success: true,
     });
   },
-    
-  async filaDeImpressao(data, tipoFila) {
+  async imprimeCopa(data, tipoFila, numero_ticket) {
+
     var data_formatada = new Date().toISOString().substr(0,10)
    
-    console.log(tipoFila);
-    const printQueue = {
+    const imprimeCopa = {
       [dbSettings.print_queue_content_col]: data,
       [dbSettings.print_queue_inserction_date_time_col]: data_formatada,
       [dbSettings.print_queue_printed_col]: false,
-      [dbSettings.print_queue_type_queue_print]: tipoFila
+      [dbSettings.print_queue_type_queue_print]: tipoFila,
+      [dbSettings.print_queue_ticket_number]: numero_ticket
     };
-    
-    console.log(tipoFila);
-    await connection(dbSettings.print_queue_table)
-    .insert(printQueue)
-    .into(dbSettings.print_queue_table);
+      await connection(dbSettings.print_queue_table)
+      .insert(imprimeCopa)
+      .into(dbSettings.print_queue_table);
   },
   async gravarObservacao(data) {
     await connection(dbSettings.observations_table)
