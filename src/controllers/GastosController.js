@@ -282,17 +282,19 @@ QTDE    |   DESCRICAO   |   OBSERVAÇÃO
 ${produtosFIlaCopa.join("\n")} 
 -------------------------------------------------------------------------------------------------\n
 `;
-    const imprimeCozinha = {
-      [dbSettings.print_queue_content_col]: ticketCozinha,
-      [dbSettings.print_queue_inserction_date_time_col]: data_formatada,
-      [dbSettings.print_queue_printed_col]: false,
-      [dbSettings.print_queue_type_queue_print]: tipoFilaRestaurante,
-      [dbSettings.print_queue_ticket_number]: numeroTicket
-    };
-      await connection(dbSettings.print_queue_table)
-      .insert(imprimeCozinha)
-      .into(dbSettings.print_queue_table);
-
+    if(produtosFilaCozinha.length > 0) {
+      const imprimeCozinha = {
+        [dbSettings.print_queue_content_col]: ticketCozinha,
+        [dbSettings.print_queue_inserction_date_time_col]: data_formatada,
+        [dbSettings.print_queue_printed_col]: false,
+        [dbSettings.print_queue_type_queue_print]: tipoFilaRestaurante,
+        [dbSettings.print_queue_ticket_number]: numeroTicket
+      };
+        await connection(dbSettings.print_queue_table)
+        .insert(imprimeCozinha)
+        .into(dbSettings.print_queue_table);
+    } 
+    
       setTimeout(() => {
         if(produtosFIlaCopa.length <= 0) {
           return;
